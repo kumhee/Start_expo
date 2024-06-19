@@ -66,7 +66,6 @@ export default function App() {
   }
 
   // guessRounds가 특정시점에 변경되도록
-
   return (
     <LinearGradient colors={[Colors.primary600, Colors.accent400]} // 그라데이션 색상 배열
       style={styles.rootScreen}>
@@ -91,5 +90,5 @@ const styles = StyleSheet.create({
 
   backgroundImage: {
     opacity: 0.3, // 배경 이미지 투명도 조절
-  },
+  }, 
 });

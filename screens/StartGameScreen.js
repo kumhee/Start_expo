@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, TextInput, View, Alert } from "react-native";
+import { StyleSheet, TextInput, View, Alert, useWindowDimensions, KeyboardAvoidingView, ScrollView } from "react-native";
 
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Colors from "../constants/colors";
@@ -9,6 +9,8 @@ import InstructionText from "../components/ui/InstructionText";
 
 function StartGameScreen({ onPickNumber }) {
   const [enteredNumber, setEnteredNumber] = useState("") // 입력된 숫자를 저장할 상태
+
+  const { width, height } = useWindowDimensions();
 
   function numberInputHandler(enteredText) {  // 입력된 숫자를 저장하는 함수  
     setEnteredNumber(enteredText); // 입력된 숫자로 업데이트
@@ -29,45 +31,56 @@ function StartGameScreen({ onPickNumber }) {
       );
       return; // 함수 종료
     }
-
     //console.log("Valid Number"); 
     onPickNumber(chosenNumber); // 사용자가 선택한 숫자를 App.js로 전달
   }
 
-  return (
-    <View style={styles.rootContainer}>
-      <Title> Guess My Number </Title>
-      <Card>
-        <InstructionText> Enter a Number </InstructionText>
-        <TextInput
-          style={styles.numberInput}
-          maxLength={2}
-          keyboardType="number-pad"
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={numberInputHandler} // 입력된 숫자를 저장
-          value={enteredNumber} // 입력된 숫자를 표시
-        />
-        <View style={styles.buttonsContainer}>
-          <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={resetInputHandler}> Reset </PrimaryButton>
-          </View>
+  const marginTopDistance = height < 380 ? 30 : 100;
 
-          <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={confirmInputHandler}> Confirm </PrimaryButton>
-          </View>
+  return (
+    <ScrollView style={styles.screen}>
+      <KeyboardAvoidingView style={styles.screen} behavior="position">
+        <View style={[styles.rootContainer, { marginTop: marginTopDistance }]}>
+          <Title> Guess My Number </Title>
+          <Card>
+            <InstructionText> Enter a Number </InstructionText>
+            <TextInput
+              style={styles.numberInput}
+              maxLength={2}
+              keyboardType="number-pad"
+              autoCapitalize="none"
+              autoCorrect={false}
+              onChangeText={numberInputHandler} // 입력된 숫자를 저장
+              value={enteredNumber} // 입력된 숫자를 표시
+            />
+            <View style={styles.buttonsContainer}>
+              <View style={styles.buttonContainer}>
+                <PrimaryButton onPress={resetInputHandler}> Reset </PrimaryButton>
+              </View>
+
+              <View style={styles.buttonContainer}>
+                <PrimaryButton onPress={confirmInputHandler}> Confirm </PrimaryButton>
+              </View>
+            </View>
+          </Card>
         </View>
-      </Card>
-    </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
 export default StartGameScreen;
 
+// const deviceHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
+
   rootContainer: {
     flex: 1,
-    marginTop: 100,
+    // marginTop: deviceHeight < 380 ? 30 : 100,
     alignItems: 'center',
   },
 
